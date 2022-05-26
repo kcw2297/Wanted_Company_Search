@@ -37,4 +37,5 @@ class BaseSerializer(serializers.ModelSerializer):
 
 class RetrieveSerializer(BaseSerializer):
     class Meta:
+        model = CompanyInfo
         fields = ['company_name']

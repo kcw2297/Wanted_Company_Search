@@ -13,7 +13,7 @@ class TagSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Tag
-        fields = ['name']
+        fields = ['id','name']
 
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -32,3 +32,9 @@ class BaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompanyInfo
         fields = ['company','company_name','language','tag']
+        depth = 1
+
+
+class RetrieveSerializer(BaseSerializer):
+    class Meta:
+        fields = ['company_name']

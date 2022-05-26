@@ -10,7 +10,7 @@ from django.db import models
 
 class Tag(models.Model):
     name = models.CharField(max_length=255, verbose_name='태그 이름')
-
+    # name = models.JSONField()
     class Meta:
         db_table = 'Tag'
 
@@ -24,7 +24,7 @@ class Company(models.Model):
         db_table = 'Company'
 
     def __str__(self):
-        return str(self.company_name)
+        return str(self.id)
 
 
 class CompanyInfo(models.Model):

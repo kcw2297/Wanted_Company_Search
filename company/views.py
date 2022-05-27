@@ -1,5 +1,5 @@
 from company.models import Company, CompanyInfo ,Tag
-from company.serializers import BaseSerializer, RetrieveSerializer
+from company.serializers import CompanyBaseSerializer, CompanyRetrieveSerializer, CompanyPOSTSerializer
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -21,14 +21,10 @@ class CompanyListCreate(APIView):
     def get_serializer_class(self):
         param = self.request.query_params.get('query', None)
         if param:
-            return RetrieveSerializer
-        return BaseSerializer
-
-    def get_serializer(self, *args, **kwargs):
-        return self.get_serializer_class(*args, **kwargs)
-
-    def get_object(self):
-        pass
+            return CompanyRetrieveSerializer
+        if self.request.method == 'POST':
+            return CompanyPOSTSerializer
+        return CompanyBaseSerializer
 
     """
         Handler Method 시작
@@ -40,24 +36,25 @@ class CompanyListCreate(APIView):
         if param:
             objs = objs.filter(company_name__icontains=param).values('company_name')
 
-        serializer = self.get_serializer()
-        serializer = serializer(objs, many=True)
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(objs, many=True)
 
-        return Response(serializer.data, status=200)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # def post(self, request):
-    #     serializer = self.get_serializer()
-    #     company = Company.object.create()
-    #     serializer = serializer(data=request.data)
-
-    #     serializer[company] = company
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request):
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class CompanyRetrieve(APIView):
+    # def get_object(self):
+    #     pass
+
 #     def get_queryset(self):
 #         # language = self.request.headers['x-wanted-language"'] # 이 부분은 배포시 사용됩니다
 #         language = self.request.headers['Accept-Language'][0:2] # 이 부분은 테스트 목적입니다

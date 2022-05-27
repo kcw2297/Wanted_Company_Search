@@ -25,7 +25,7 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = ['id']
 
 
-class BaseSerializer(serializers.ModelSerializer):
+class CompanyBaseSerializer(serializers.ModelSerializer):
     tag = TagSerializer(many=True)
     company = CompanySerializer(read_only=True)
 
@@ -35,7 +35,27 @@ class BaseSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class RetrieveSerializer(BaseSerializer):
+class CompanyRetrieveSerializer(CompanyBaseSerializer):
     class Meta:
         model = CompanyInfo
         fields = ['company_name']
+
+class CompanyPOSTSerializer(CompanyBaseSerializer):
+    company = CompanySerializer()
+
+    class Meta:
+        model = CompanyInfo
+        fields = ['company','company_name','language','tag']
+        depth = 1
+        
+
+    def create(self, validated_data):
+        tags = validated_data.pop('tag')
+
+        companyinfo = CompanyInfo.objects.get_or_create(**validated_data)
+
+        for tag in tags:
+            tag.pop('id',None)
+            tag, created = Tag.objects.get_or_create(**tags)
+            companyinfo.tag.add(tag)
+        return companyinfo

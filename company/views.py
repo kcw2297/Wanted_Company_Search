@@ -42,6 +42,10 @@ class CompanyListCreate(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
+        """
+            추가하는 데이터:
+            company, company_name, language, tag
+        """ 
         serializer_class = self.get_serializer_class()
         serializer = serializer_class(data=request.data)
         

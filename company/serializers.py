@@ -40,6 +40,7 @@ class CompanyRetrieveSerializer(CompanyBaseSerializer):
         model = CompanyInfo
         fields = ['company_name']
 
+
 class CompanyPOSTSerializer(CompanyBaseSerializer):
     company = CompanySerializer()
 
@@ -47,15 +48,19 @@ class CompanyPOSTSerializer(CompanyBaseSerializer):
         model = CompanyInfo
         fields = ['company','company_name','language','tag']
         depth = 1
-        
+    
+    def validate_company(self, value):
+        return Company.objects.get(id=value)
 
     def create(self, validated_data):
         tags = validated_data.pop('tag')
+        company = validated_data.pop('company')
+        company, created = Company.objects.get_or_create(company['company'])
 
-        companyinfo = CompanyInfo.objects.get_or_create(**validated_data)
+
+        companyinfo = CompanyInfo.objects.create(company=company,**validated_data)
 
         for tag in tags:
-            tag.pop('id',None)
-            tag, created = Tag.objects.get_or_create(**tags)
+            tag, created = Tag.objects.get_or_create(tag['name'])
             companyinfo.tag.add(tag)
         return companyinfo

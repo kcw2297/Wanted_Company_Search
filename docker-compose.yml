@@ -10,10 +10,11 @@ services:
       - web
 
   web:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     container_name: web
+    command: gunicorn --bind 0.0.0.0:8000 config.wsgi.deploy:application
     expose:
       - 8000
     volumes:
@@ -23,8 +24,11 @@ services:
   
   db:
     image: postgres
-    container_namer: db
+    container_name: db
+    ports:
+      - 5432:5432
     env_file:
       - ./.env
-    volumes:
+    volumes:  
       - ./data:/var/lib/postgres/data
+   

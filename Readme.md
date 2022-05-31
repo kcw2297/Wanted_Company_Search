@@ -4,6 +4,7 @@
 
 ## 과제 해석 [GoTo](https://www.notion.so/Wanted_Company_Search-5aa21858d1c24632a3f3811644b67414)
 개별 회사 정보를 조회하는 api를 생성합니다. 회사명을 일부만 검색해도 자동완성하는 기능을 추가합니다.
+* 배포 관련 부분은 미완성하였습니다. DB연결 시 생기는 에러는 추후 해결이 되면 고치겠습니다
 
 ### 기술 스택
 <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=Python&logoColor=white"/> <img src="https://img.shields.io/badge/Django-092E20?style=flat-square&logo=Django&logoColor=white"/> <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=PostgreSQL&logoColor=white"/>

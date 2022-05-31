@@ -1,34 +1,43 @@
-version: '3.8'
+version: '3'
 services:
   nginx:
-    image: nginx
+    image: nginx:latest
     ports:
-      - 80:80
+      - "80:80"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
+      - static-data:/static
     depends_on:
       - web
+    networks:
+      - subnet
 
   web:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: web
-    command: gunicorn --bind 0.0.0.0:8000 config.wsgi.deploy:application
-    expose:
-      - 8000
-    volumes:
-      - .:/app
-    depends_on:
-      - db
-  
-  db:
-    image: postgres
-    container_name: db
-    ports:
-      - 5432:5432
     env_file:
       - ./.env
-    volumes:  
-      - ./data:/var/lib/postgres/data
-   
+    volumes:
+      - static-data:/wanted_lab/static
+    depends_on:
+      - db
+    networks:
+      - subnet
+
+  db:
+    restart: always
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./.env
+    networks:
+      - subnet
+
+volumes:
+  static-data:
+
+networks:
+  subnet:
+    driver: bridge

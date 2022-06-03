@@ -2,6 +2,7 @@
 <img src="./source/wanted.png" alt="wanted">
 
 ## 배포 [GoTo](http://13.124.82.97:8000)
+- aws 비용으로 인해 중단하였습니다
 
 ## 과제 해석 [GoTo](https://www.notion.so/Wanted_Company_Search-5aa21858d1c24632a3f3811644b67414)
 개별 회사 정보를 조회하는 api를 생성합니다. 회사명을 일부만 검색해도 자동완성하는 기능을 추가합니다.
